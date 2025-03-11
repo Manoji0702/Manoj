@@ -4,27 +4,31 @@
 # https://aka.ms/yaml
 
 trigger:
-  branches:
-    include:
-      - main
+- main  # Runs the pipeline when new code is pushed to the 'main' branch
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-latest'  # Use a Windows agent
 
 steps:
-  - task: UseDotNet@2
-    inputs:
-      packageType: 'sdk'
-      version: '6.x'  # Adjust the .NET version
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '6.x'  # Change this to match your .NET version
+    installationPath: $(Agent.ToolsDirectory)/dotnet
 
-  - script: dotnet build --configuration Release
-    displayName: 'Build Solution'
+- script: dotnet restore "Manoj/MyWebApp/MyWebApp.csproj"
+  displayName: 'Restore Dependencies'
 
-  - script: dotnet test --logger trx
-    displayName: 'Run Unit Tests'
+- script: dotnet build "Manoj/MyWebApp/MyWebApp.csproj" --configuration Release
+  displayName: 'Build Solution'
 
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: 'drop'
+- script: dotnet publish "Manoj/MyWebApp/MyWebApp.csproj" -c Release -o $(Build.ArtifactStagingDirectory)
+  displayName: 'Publish Application'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'drop'
+  displayName: 'Publish Artifact'
+
 
