@@ -13,16 +13,16 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '6.x'  # Change this to match your .NET version
+    version: '6.x'  # Installs latest .NET 6 SDK
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- script: dotnet restore "$(Build.SourcesDirectory)/Manoj/MyWebApp/MyWebApp.csproj"
+- script: dotnet restore "$(Build.SourcesDirectory)/MyWebApp/MyWebApp.csproj"
   displayName: 'Restore Dependencies'
 
-- script: dotnet build "$(Build.SourcesDirectory)/Manoj/MyWebApp/MyWebApp.csproj" --configuration Release
+- script: dotnet build "$(Build.SourcesDirectory)/MyWebApp/MyWebApp.csproj" --configuration Release
   displayName: 'Build Solution'
 
-- script: dotnet publish "$(Build.SourcesDirectory)/Manoj/MyWebApp/MyWebApp.csproj" -c Release -o $(Build.ArtifactStagingDirectory)
+- script: dotnet publish "$(Build.SourcesDirectory)/MyWebApp/MyWebApp.csproj" -c Release -o $(Build.ArtifactStagingDirectory)
   displayName: 'Publish Application'
 
 - task: PublishBuildArtifacts@1
@@ -30,6 +30,7 @@ steps:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'drop'
   displayName: 'Publish Artifact'
+
 
 
 
