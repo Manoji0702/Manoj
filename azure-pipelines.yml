@@ -16,13 +16,13 @@ steps:
     version: '6.x'  # Change this to match your .NET version
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- script: dotnet restore "Manoj/MyWebApp/MyWebApp.csproj"
+- script: dotnet restore "$(Build.SourcesDirectory)/Manoj/MyWebApp/MyWebApp.csproj"
   displayName: 'Restore Dependencies'
 
-- script: dotnet build "Manoj/MyWebApp/MyWebApp.csproj" --configuration Release
+- script: dotnet build "$(Build.SourcesDirectory)/Manoj/MyWebApp/MyWebApp.csproj" --configuration Release
   displayName: 'Build Solution'
 
-- script: dotnet publish "Manoj/MyWebApp/MyWebApp.csproj" -c Release -o $(Build.ArtifactStagingDirectory)
+- script: dotnet publish "$(Build.SourcesDirectory)/Manoj/MyWebApp/MyWebApp.csproj" -c Release -o $(Build.ArtifactStagingDirectory)
   displayName: 'Publish Application'
 
 - task: PublishBuildArtifacts@1
@@ -30,5 +30,6 @@ steps:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'drop'
   displayName: 'Publish Artifact'
+
 
 
